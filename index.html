@@ -57,8 +57,9 @@ pre{background:#0F172A;border:1px solid var(--line);border-radius:14px;padding:2
 /* ---- presentation deck ---- */
 .slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;max-width:1000px;margin:0 auto;padding:96px 28px}
 body.deck main{position:relative}
-body.deck .slide{display:none;animation:fade .35s ease}
-body.deck .slide.active{display:flex}
+body.deck .slide{display:none}
+body.deck .slide.active{display:flex;align-items:center;justify-content:center;height:100dvh;min-height:100dvh;max-width:none;margin:0;padding:60px 32px 64px;overflow:hidden;animation:fade .35s ease}
+body.deck .slide .fit{display:flex;flex-direction:column;justify-content:center;width:1000px;max-width:1000px;transform-origin:center center;will-change:transform}
 @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 /* toolbar */
 .deckbar{position:fixed;top:14px;right:16px;z-index:50;display:flex;gap:8px;align-items:center;background:rgba(15,23,42,.78);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:999px;padding:6px 8px}
@@ -81,7 +82,8 @@ body:not(.deck) .deckctl,body:not(.deck) .progress{display:none}
   @page{size:A4 landscape;margin:14mm}
   body{background:#0F172A !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .deckbar,.deckctl,.progress,.term .cur{display:none !important}
-  body.deck .slide{display:flex !important;min-height:auto;page-break-after:always;break-after:page;padding:24px 8px;max-width:100%}
+  body.deck .slide,body.deck .slide.active{display:flex !important;min-height:auto;height:auto;page-break-after:always;break-after:page;padding:24px 8px;max-width:100%;overflow:visible}
+  body.deck .slide .fit{transform:none !important;width:auto !important;max-width:100% !important}
   .slide:last-of-type{page-break-after:auto}
   pre,.card,.langgrid .l,.term{box-shadow:none}
 }
@@ -329,10 +331,22 @@ const I18N = {
 
 (function(){
   const slides = Array.from(document.querySelectorAll('.slide'));
+  // wrap each slide's content so it can be scaled as a whole to fill the screen
+  slides.forEach(s=>{const f=document.createElement('div');f.className='fit';while(s.firstChild)f.appendChild(s.firstChild);s.appendChild(f);});
   const params = new URLSearchParams(location.search);
   let lang = params.get('lang') || localStorage.getItem('ifuri-lang') || (navigator.language||'en').slice(0,2);
   if(!I18N[lang]) lang = 'en';
   let idx = 0;
+
+  function fitSlide(){
+    const s = slides[idx]; if(!s || !s.classList.contains('active')) return;
+    const f = s.querySelector('.fit'); if(!f) return;
+    f.style.transform = 'none';
+    const vw = window.innerWidth;
+    const vh = (window.visualViewport && window.visualViewport.height) || window.innerHeight;
+    const sc = Math.min((vw-72)/f.offsetWidth, (vh-132)/f.offsetHeight, 2.4);
+    f.style.transform = 'scale(' + (sc>0?sc:1) + ')';
+  }
 
   function applyLang(l){
     lang = I18N[l] ? l : 'en';
@@ -343,6 +357,7 @@ const I18N = {
       if(v!=null) el.innerHTML = v;
     });
     document.querySelectorAll('.deckbar .lang').forEach(b=>b.classList.toggle('active', b.dataset.lang===lang));
+    fitSlide();
   }
 
   function show(n){
@@ -353,7 +368,11 @@ const I18N = {
     document.getElementById('next').disabled = idx===slides.length-1;
     document.getElementById('progress').style.width = ((idx+1)/slides.length*100)+'%';
     if(history.replaceState) history.replaceState(null,'','#'+(slides[idx].id||idx));
+    fitSlide();
   }
+  window.addEventListener('resize', fitSlide);
+  window.addEventListener('load', fitSlide);
+  window.addEventListener('hashchange', ()=>{const i=slides.findIndex(s=>s.id===location.hash.slice(1));if(i>=0&&i!==idx)show(i);});
 
   document.querySelectorAll('.deckbar .lang').forEach(b=>b.addEventListener('click',()=>applyLang(b.dataset.lang)));
   document.getElementById('prev').addEventListener('click',()=>show(idx-1));
