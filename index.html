@@ -19,9 +19,7 @@
 :root{--bg:#1E1B4B;--bg2:#191640;--text:#EEF2FF;--muted:#A5B4FC;--line:rgba(255,255,255,.14);--green:#34D399;--cyan:#22D3EE;--violet:#4F46E5;--card:rgba(255,255,255,.06)}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
 body{margin:0;background:radial-gradient(900px 520px at 88% -8%,rgba(79,70,229,.22),transparent 60%),linear-gradient(180deg,var(--bg),var(--bg2));color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;line-height:1.6;min-height:100vh}
-main{scroll-snap-type:y proximity}
 a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
-.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;max-width:1000px;margin:0 auto;padding:96px 28px;scroll-snap-align:start}
 .eyebrow{text-transform:uppercase;letter-spacing:.2em;color:var(--green);font-weight:800;font-size:13px;margin:0 0 16px}
 h1{font-size:clamp(38px,7vw,76px);line-height:1.02;letter-spacing:-.03em;margin:0 0 18px}
 h2{font-size:clamp(28px,4.5vw,46px);line-height:1.08;letter-spacing:-.02em;margin:0 0 18px}
@@ -47,35 +45,75 @@ pre{background:#0F172A;border:1px solid var(--line);border-radius:14px;padding:2
 .term .bar{display:flex;gap:7px;padding:11px 14px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.03)}
 .term .bar i{width:11px;height:11px;border-radius:50%;background:#475569;display:inline-block}
 .term .bar i:nth-child(1){background:#f87171}.term .bar i:nth-child(2){background:#fbbf24}.term .bar i:nth-child(3){background:var(--green)}
-.term pre{margin:0;padding:18px 20px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13.5px;line-height:1.7;color:#cdd6ee;overflow:auto}
+.term pre{margin:0;padding:18px 20px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13.5px;line-height:1.7;color:#cdd6ee;overflow:auto;border:0;border-radius:0;background:transparent}
 .term .p{color:var(--green)}.term .u{color:#fff}.term .c{color:var(--cyan)}.term .d{color:var(--muted)}
 .term .cur{display:inline-block;width:8px;height:15px;vertical-align:-2px;background:var(--green);animation:blink 1.1s steps(1) infinite}
 @keyframes blink{50%{opacity:0}}
 .langgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-top:28px}
 .langgrid .l{border:1px solid var(--line);background:#0B1020;border-radius:12px;overflow:hidden}
 .langgrid .l h4{margin:0;padding:10px 14px;font-size:13px;color:var(--green);border-bottom:1px solid var(--line);font-family:ui-monospace,Menlo,monospace}
-.langgrid .l pre{margin:0;padding:14px;font-family:ui-monospace,Menlo,monospace;font-size:12px;line-height:1.55;color:#cdd6ee;overflow:auto}
-@media(max-width:640px){.slide{padding:72px 18px;min-height:auto}}
+.langgrid .l pre{margin:0;padding:14px;font-family:ui-monospace,Menlo,monospace;font-size:12px;line-height:1.55;color:#cdd6ee;overflow:auto;border:0;border-radius:0}
+
+/* ---- presentation deck ---- */
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;max-width:1000px;margin:0 auto;padding:96px 28px}
+body.deck main{position:relative}
+body.deck .slide{display:none;animation:fade .35s ease}
+body.deck .slide.active{display:flex}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+/* toolbar */
+.deckbar{position:fixed;top:14px;right:16px;z-index:50;display:flex;gap:8px;align-items:center;background:rgba(15,23,42,.78);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:999px;padding:6px 8px}
+.deckbar button{font:inherit;font-size:13px;font-weight:700;color:var(--muted);background:transparent;border:1px solid transparent;border-radius:999px;padding:6px 11px;cursor:pointer}
+.deckbar button:hover{color:var(--text)}
+.deckbar button.lang.active{color:#0F172A;background:var(--green);border-color:var(--green)}
+.deckbar .sep{width:1px;height:20px;background:var(--line)}
+.deckbar .pdf{color:var(--text);border-color:var(--line)}
+/* nav controls */
+.deckctl{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:50;display:flex;gap:10px;align-items:center;background:rgba(15,23,42,.78);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:999px;padding:6px 10px}
+.deckctl button{font:inherit;color:var(--text);background:transparent;border:1px solid var(--line);border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:16px;line-height:1}
+.deckctl button:disabled{opacity:.35;cursor:default}
+.deckctl .count{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;min-width:46px;text-align:center}
+.progress{position:fixed;top:0;left:0;height:3px;background:var(--green);width:0;z-index:60;transition:width .3s ease}
+body:not(.deck) .deckctl,body:not(.deck) .progress{display:none}
+@media(max-width:640px){.slide{padding:72px 18px;min-height:100vh}.deckbar{top:8px;right:8px}}
+
+/* ---- print / PDF: one slide per page, all visible ---- */
+@media print{
+  @page{size:A4 landscape;margin:14mm}
+  body{background:#0F172A !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .deckbar,.deckctl,.progress,.term .cur{display:none !important}
+  body.deck .slide{display:flex !important;min-height:auto;page-break-after:always;break-after:page;padding:24px 8px;max-width:100%}
+  .slide:last-of-type{page-break-after:auto}
+  pre,.card,.langgrid .l,.term{box-shadow:none}
+}
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"AboutPage","name":"About ifURI","url":"https://about.ifuri.com/","description":"What ifURI is: if URI, then flow — a local-first URI runtime for flows, MCP, A2A, LLM and LAN apps.","publisher":{"@type":"Organization","name":"ifURI","url":"https://ifuri.com/"}}
 </script>
 </head>
-<body>
+<body class="deck">
+
+<div class="progress" id="progress"></div>
+<nav class="deckbar" aria-label="presentation controls">
+  <button class="lang" data-lang="pl">PL</button>
+  <button class="lang" data-lang="en">EN</button>
+  <button class="lang" data-lang="de">DE</button>
+  <span class="sep"></span>
+  <button class="pdf" id="pdfBtn" title="Download as PDF">PDF</button>
+</nav>
+
 <main>
 
   <section class="slide" id="top">
     <p class="eyebrow">about.ifuri.com</p>
-    <h1><b class="brand">if<i>URI</i></b>,<br>then flow.</h1>
-    <p class="lead">One local-first runtime that turns every command, service, container and app into an
-      <strong>addressable URI</strong> — then composes them into flows across MCP tools, A2A agents, local LLMs and LAN devices.</p>
+    <h1><b class="brand">if<i>URI</i></b>,<br><span data-i18n="top.h1b">then flow.</span></h1>
+    <p class="lead" data-i18n="top.lead">One local-first runtime that turns every command, service, container and app into an <strong>addressable URI</strong> — then composes them into flows across MCP tools, A2A agents, local LLMs and LAN devices.</p>
     <div class="chips">
       <span>ifuri://</span><span>urirun://</span><span>mcp://</span><span>agent://</span><span>llm://</span><span>browser://</span><span>shell://</span><span>error://</span>
     </div>
     <div class="cta">
-      <a class="btn primary" href="https://get.ifuri.com">Install a node</a>
+      <a class="btn primary" href="https://get.ifuri.com" data-i18n="cta.install">Install a node</a>
       <a class="btn" href="https://ifuri.com">ifuri.com</a>
-      <a class="btn" href="https://docs.ifuri.com">Docs</a>
+      <a class="btn" href="https://docs.ifuri.com" data-i18n="cta.docs">Docs</a>
     </div>
     <div class="term" aria-hidden="true">
       <div class="bar"><i></i><i></i><i></i></div>
@@ -87,20 +125,26 @@ pre{background:#0F172A;border:1px solid var(--line);border-radius:14px;padding:2
     </div>
   </section>
 
+  <section class="slide" id="whatis">
+    <p class="eyebrow" data-i18n="whatis.eyebrow">ifURI vs urirun</p>
+    <h2 data-i18n="whatis.h2">Two names, one idea.</h2>
+    <div class="cards">
+      <div class="card"><p class="k">urirun://</p><h3 data-i18n="whatis.urirun.h3">urirun — the engine</h3><p data-i18n="whatis.urirun.p">The open runtime + SDK. Declare a URI, compile a registry, dispatch a route behind a policy gate. A library for any language, with no UI of its own.</p></div>
+      <div class="card"><p class="k">ifuri://</p><h3 data-i18n="whatis.ifuri.h3">ifURI — the product</h3><p data-i18n="whatis.ifuri.p">The local-first app and ecosystem built on urirun: desktop app, LAN mesh, connector hub, voice and chat — the batteries-included experience.</p></div>
+    </div>
+    <p class="lead" style="margin-top:22px" data-i18n="whatis.note">In short: <strong>urirun</strong> is the runtime you embed; <strong>ifURI</strong> is what you run, install and use.</p>
+  </section>
+
   <section class="slide" id="problem">
-    <p class="eyebrow">The problem</p>
-    <h2>Every integration is a one-off.</h2>
-    <p class="lead">Shell scripts, HTTP calls, Docker commands, MCP servers, agents and device APIs each speak
-      a different language. Glue code rots, nothing is reusable, and nothing is auditable. You can't address a
-      capability — you can only re-implement calling it.</p>
+    <p class="eyebrow" data-i18n="problem.eyebrow">The problem</p>
+    <h2 data-i18n="problem.h2">Every integration is a one-off.</h2>
+    <p class="lead" data-i18n="problem.lead">Shell scripts, HTTP calls, Docker commands, MCP servers, agents and device APIs each speak a different language. Glue code rots, nothing is reusable, and nothing is auditable. You can't address a capability — you can only re-implement calling it.</p>
   </section>
 
   <section class="slide" id="idea">
-    <p class="eyebrow">The idea</p>
-    <h2>Name it once. Run it anywhere.</h2>
-    <p class="lead">Declare an action one time as a stable address —
-      <code>scheme://target/resource/operation</code> — and call it from a shell, backend, frontend, flow or agent.
-      <strong>urirun</strong> validates the payload against a schema, gates it with policy, and dispatches it.</p>
+    <p class="eyebrow" data-i18n="idea.eyebrow">The idea</p>
+    <h2 data-i18n="idea.h2">Name it once. Run it anywhere.</h2>
+    <p class="lead" data-i18n="idea.lead">Declare an action one time as a stable address — <code>scheme://target/resource/operation</code> — and call it from a shell, backend, frontend, flow or agent. <strong>urirun</strong> validates the payload against a schema, gates it with policy, and dispatches it.</p>
 <pre>flow:
   do:
     - urirun://local/registry/query/health
@@ -110,34 +154,28 @@ pre{background:#0F172A;border:1px solid var(--line);border-radius:14px;padding:2
   </section>
 
   <section class="slide" id="runtime">
-    <p class="eyebrow">One runtime</p>
-    <h2>Flows, MCP, A2A, LLM and LAN — one contract.</h2>
+    <p class="eyebrow" data-i18n="runtime.eyebrow">One runtime</p>
+    <h2 data-i18n="runtime.h2">Flows, MCP, A2A, LLM and LAN — one contract.</h2>
     <div class="cards">
-      <div class="card"><p class="k">urirun://</p><h3>URI runtime</h3><p>Scan artifacts, compile a reviewable registry, run routes with policy + audit.</p></div>
-      <div class="card"><p class="k">mcp:// · agent://</p><h3>MCP &amp; A2A</h3><p>The same registry projects to MCP tools and A2A agent cards for free.</p></div>
-      <div class="card"><p class="k">ifuri://</p><h3>LAN mesh</h3><p>Discover nodes, advertise services, route a flow step to a peer.</p></div>
-      <div class="card"><p class="k">error://</p><h3>Addressable errors</h3><p>Failures get a stable code, a category and a docs link — searchable, fixable, ticketable.</p></div>
+      <div class="card"><p class="k">urirun://</p><h3 data-i18n="runtime.c1.h3">URI runtime</h3><p data-i18n="runtime.c1.p">Scan artifacts, compile a reviewable registry, run routes with policy + audit.</p></div>
+      <div class="card"><p class="k">mcp:// · agent://</p><h3 data-i18n="runtime.c2.h3">MCP &amp; A2A</h3><p data-i18n="runtime.c2.p">The same registry projects to MCP tools and A2A agent cards for free.</p></div>
+      <div class="card"><p class="k">ifuri://</p><h3 data-i18n="runtime.c3.h3">LAN mesh</h3><p data-i18n="runtime.c3.p">Discover nodes, advertise services, route a flow step to a peer.</p></div>
+      <div class="card"><p class="k">error://</p><h3 data-i18n="runtime.c4.h3">Addressable errors</h3><p data-i18n="runtime.c4.p">Failures get a stable code, a category and a docs link — searchable, fixable, ticketable.</p></div>
     </div>
   </section>
 
   <section class="slide" id="connectors">
-    <p class="eyebrow">Connectors</p>
-    <h2>Capabilities as installable packages — in any language.</h2>
-    <p class="lead">A connector declares URI routes once and exports a registry. The runtime is a contract, not a
-      language: a connector's executable can be written in anything, and the <strong>urirun SDK</strong> ships for
-      multiple languages so it can be a library inside your project.</p>
+    <p class="eyebrow" data-i18n="connectors.eyebrow">Connectors</p>
+    <h2 data-i18n="connectors.h2">Capabilities as installable packages — in any language.</h2>
+    <p class="lead" data-i18n="connectors.lead">A connector declares URI routes once and exports a registry. The runtime is a contract, not a language: a connector's executable can be written in anything, and the <strong>urirun SDK</strong> ships for multiple languages so it can be a library inside your project.</p>
     <div class="langs"><span>Python</span><span>JavaScript</span><span>Go</span><span>PHP</span><span>…</span></div>
-    <p class="lead" style="margin-top:22px">Generate connectors from a <strong>command</strong>, a <strong>service</strong>,
-      or an artifact like a <strong>Docker image</strong> — the same <code>urirun.bindings.v2</code> contract every time.
-      Browse the public hub at <a href="https://connect.ifuri.com">connect.ifuri.com</a>.</p>
+    <p class="lead" style="margin-top:22px" data-i18n="connectors.note">Generate connectors from a <strong>command</strong>, a <strong>service</strong>, or an artifact like a <strong>Docker image</strong> — the same <code>urirun.bindings.v2</code> contract every time. Browse the public hub at <a href="https://connect.ifuri.com">connect.ifuri.com</a>.</p>
   </section>
 
   <section class="slide" id="languages">
-    <p class="eyebrow">One contract, any language</p>
-    <h2>The same connector — Python, JS, Go, PHP.</h2>
-    <p class="lead">A connector just emits a <code>urirun.bindings.v2</code> document. The SDK ships per language,
-      so urirun is a library inside your project. Each snippet below produces the identical contract —
-      <code>urirun validate</code> accepts all of them.</p>
+    <p class="eyebrow" data-i18n="languages.eyebrow">One contract, any language</p>
+    <h2 data-i18n="languages.h2">The same connector — Python, JS, Go, PHP.</h2>
+    <p class="lead" data-i18n="languages.lead">A connector just emits a <code>urirun.bindings.v2</code> document. The SDK ships per language, so urirun is a library inside your project. Each snippet below produces the identical contract — <code>urirun validate</code> accepts all of them.</p>
     <div class="langgrid">
       <div class="l"><h4>python</h4><pre>c = urirun.connector(
   "hash", scheme="hash")
@@ -163,36 +201,181 @@ def f(path: str):
   </section>
 
   <section class="slide" id="proof">
-    <p class="eyebrow">Local-first &amp; auditable</p>
-    <h2>It runs on your laptop, one command.</h2>
+    <p class="eyebrow" data-i18n="proof.eyebrow">Local-first &amp; auditable</p>
+    <h2 data-i18n="proof.h2">It runs on your laptop, one command.</h2>
 <pre>curl -fsSL https://get.ifuri.com/node.sh | bash -s -- --name laptop --connectors http-check,time-tools</pre>
-    <p class="lead" style="margin-top:20px">Every call carries an envelope: URI, payload, decision, status, time and source.
-      Nothing runs by accident — execution is default-deny behind an explicit policy gate.</p>
+    <p class="lead" style="margin-top:20px" data-i18n="proof.lead">Every call carries an envelope: URI, payload, decision, status, time and source. Nothing runs by accident — execution is default-deny behind an explicit policy gate.</p>
   </section>
 
   <section class="slide" id="ecosystem">
-    <p class="eyebrow">The ecosystem</p>
-    <h2>Sites, runtime, connectors, demos.</h2>
+    <p class="eyebrow" data-i18n="ecosystem.eyebrow">The ecosystem</p>
+    <h2 data-i18n="ecosystem.h2">Sites, runtime, connectors, demos.</h2>
     <div class="cards">
-      <div class="card"><h3><a href="https://ifuri.com">ifuri.com</a></h3><p>App + runtime, downloads.</p></div>
-      <div class="card"><h3><a href="https://docs.ifuri.com">docs.ifuri.com</a></h3><p>Runtime, connectors, error reference.</p></div>
-      <div class="card"><h3><a href="https://connect.ifuri.com">connect.ifuri.com</a></h3><p>Connector hub + catalog.</p></div>
-      <div class="card"><h3><a href="https://get.ifuri.com">get.ifuri.com</a></h3><p>Node / host installers.</p></div>
-      <div class="card"><h3><a href="https://roadmap.ifuri.com">roadmap.ifuri.com</a></h3><p>Plan + live ticket status.</p></div>
-      <div class="card"><h3><a href="https://github.com/if-uri/examples">examples</a></h3><p>From a JSON binding to a 4-computer noVNC flow.</p></div>
+      <div class="card"><h3><a href="https://ifuri.com">ifuri.com</a></h3><p data-i18n="ecosystem.ifuri">App + runtime, downloads.</p></div>
+      <div class="card"><h3><a href="https://docs.ifuri.com">docs.ifuri.com</a></h3><p data-i18n="ecosystem.docs">Runtime, connectors, error reference.</p></div>
+      <div class="card"><h3><a href="https://connect.ifuri.com">connect.ifuri.com</a></h3><p data-i18n="ecosystem.connect">Connector hub + catalog.</p></div>
+      <div class="card"><h3><a href="https://get.ifuri.com">get.ifuri.com</a></h3><p data-i18n="ecosystem.get">Node / host installers.</p></div>
+      <div class="card"><h3><a href="https://roadmap.ifuri.com">roadmap.ifuri.com</a></h3><p data-i18n="ecosystem.roadmap">Plan + live ticket status.</p></div>
+      <div class="card"><h3><a href="https://github.com/if-uri/examples">examples</a></h3><p data-i18n="ecosystem.examples">From a JSON binding to a 4-computer noVNC flow.</p></div>
     </div>
     <div class="cta">
-      <a class="btn primary" href="https://get.ifuri.com">Get started</a>
+      <a class="btn primary" href="https://get.ifuri.com" data-i18n="cta.start">Get started</a>
       <a class="btn" href="https://github.com/if-uri">GitHub: if-uri</a>
     </div>
   </section>
 
 </main>
+
+<nav class="deckctl" aria-label="slide navigation">
+  <button id="prev" title="Previous (←)">‹</button>
+  <span class="count" id="count">1 / 1</span>
+  <button id="next" title="Next (→)">›</button>
+</nav>
+
 <footer class="foot">
-  <span><b class="brand">if<i>URI</i></b> — if URI, then flow.</span>
-  <span class="muted">Local-first URI runtime for flows, agents, MCP, LLM and LAN apps.</span>
+  <span><b class="brand">if<i>URI</i></b> — <span data-i18n="foot.tag">if URI, then flow.</span></span>
+  <span class="muted" data-i18n="foot.sub">Local-first URI runtime for flows, agents, MCP, LLM and LAN apps.</span>
   <span>© 2026 <a href="https://ifuri.com">ifuri.com</a> / <a href="https://tom.sapletta.com">Tom Sapletta</a></span>
 </footer>
+
+<script>
+// ---- i18n dictionary (PL / EN / DE) ----
+const I18N = {
+  en: {
+    "top.h1b":"then flow.",
+    "top.lead":"One local-first runtime that turns every command, service, container and app into an <strong>addressable URI</strong> — then composes them into flows across MCP tools, A2A agents, local LLMs and LAN devices.",
+    "cta.install":"Install a node","cta.docs":"Docs","cta.start":"Get started",
+    "whatis.eyebrow":"ifURI vs urirun","whatis.h2":"Two names, one idea.",
+    "whatis.urirun.h3":"urirun — the engine","whatis.urirun.p":"The open runtime + SDK. Declare a URI, compile a registry, dispatch a route behind a policy gate. A library for any language, with no UI of its own.",
+    "whatis.ifuri.h3":"ifURI — the product","whatis.ifuri.p":"The local-first app and ecosystem built on urirun: desktop app, LAN mesh, connector hub, voice and chat — the batteries-included experience.",
+    "whatis.note":"In short: <strong>urirun</strong> is the runtime you embed; <strong>ifURI</strong> is what you run, install and use.",
+    "problem.eyebrow":"The problem","problem.h2":"Every integration is a one-off.",
+    "problem.lead":"Shell scripts, HTTP calls, Docker commands, MCP servers, agents and device APIs each speak a different language. Glue code rots, nothing is reusable, and nothing is auditable. You can't address a capability — you can only re-implement calling it.",
+    "idea.eyebrow":"The idea","idea.h2":"Name it once. Run it anywhere.",
+    "idea.lead":"Declare an action one time as a stable address — <code>scheme://target/resource/operation</code> — and call it from a shell, backend, frontend, flow or agent. <strong>urirun</strong> validates the payload against a schema, gates it with policy, and dispatches it.",
+    "runtime.eyebrow":"One runtime","runtime.h2":"Flows, MCP, A2A, LLM and LAN — one contract.",
+    "runtime.c1.h3":"URI runtime","runtime.c1.p":"Scan artifacts, compile a reviewable registry, run routes with policy + audit.",
+    "runtime.c2.h3":"MCP & A2A","runtime.c2.p":"The same registry projects to MCP tools and A2A agent cards for free.",
+    "runtime.c3.h3":"LAN mesh","runtime.c3.p":"Discover nodes, advertise services, route a flow step to a peer.",
+    "runtime.c4.h3":"Addressable errors","runtime.c4.p":"Failures get a stable code, a category and a docs link — searchable, fixable, ticketable.",
+    "connectors.eyebrow":"Connectors","connectors.h2":"Capabilities as installable packages — in any language.",
+    "connectors.lead":"A connector declares URI routes once and exports a registry. The runtime is a contract, not a language: a connector's executable can be written in anything, and the <strong>urirun SDK</strong> ships for multiple languages so it can be a library inside your project.",
+    "connectors.note":"Generate connectors from a <strong>command</strong>, a <strong>service</strong>, or an artifact like a <strong>Docker image</strong> — the same <code>urirun.bindings.v2</code> contract every time. Browse the public hub at <a href=\"https://connect.ifuri.com\">connect.ifuri.com</a>.",
+    "languages.eyebrow":"One contract, any language","languages.h2":"The same connector — Python, JS, Go, PHP.",
+    "languages.lead":"A connector just emits a <code>urirun.bindings.v2</code> document. The SDK ships per language, so urirun is a library inside your project. Each snippet below produces the identical contract — <code>urirun validate</code> accepts all of them.",
+    "proof.eyebrow":"Local-first & auditable","proof.h2":"It runs on your laptop, one command.",
+    "proof.lead":"Every call carries an envelope: URI, payload, decision, status, time and source. Nothing runs by accident — execution is default-deny behind an explicit policy gate.",
+    "ecosystem.eyebrow":"The ecosystem","ecosystem.h2":"Sites, runtime, connectors, demos.",
+    "ecosystem.ifuri":"App + runtime, downloads.","ecosystem.docs":"Runtime, connectors, error reference.","ecosystem.connect":"Connector hub + catalog.","ecosystem.get":"Node / host installers.","ecosystem.roadmap":"Plan + live ticket status.","ecosystem.examples":"From a JSON binding to a 4-computer noVNC flow.",
+    "foot.tag":"if URI, then flow.","foot.sub":"Local-first URI runtime for flows, agents, MCP, LLM and LAN apps."
+  },
+  pl: {
+    "top.h1b":"to flow.",
+    "top.lead":"Jeden lokalny runtime, który zamienia każdą komendę, usługę, kontener i aplikację w <strong>adresowalny URI</strong> — a potem składa je we flow przez narzędzia MCP, agentów A2A, lokalne LLM i urządzenia w sieci LAN.",
+    "cta.install":"Zainstaluj węzeł","cta.docs":"Dokumentacja","cta.start":"Zacznij",
+    "whatis.eyebrow":"ifURI a urirun","whatis.h2":"Dwie nazwy, jedna idea.",
+    "whatis.urirun.h3":"urirun — silnik","whatis.urirun.p":"Otwarty runtime + SDK. Deklarujesz URI, kompilujesz rejestr, dispatchujesz trasę za bramką policy. Biblioteka dla dowolnego języka, bez własnego UI.",
+    "whatis.ifuri.h3":"ifURI — produkt","whatis.ifuri.p":"Lokalna aplikacja i ekosystem zbudowane na urirun: aplikacja desktop, mesh LAN, hub konektorów, głos i czat — gotowe doświadczenie „z bateriami w zestawie”.",
+    "whatis.note":"W skrócie: <strong>urirun</strong> to runtime, który wbudowujesz; <strong>ifURI</strong> to to, co uruchamiasz, instalujesz i używasz.",
+    "problem.eyebrow":"Problem","problem.h2":"Każda integracja to jednorazówka.",
+    "problem.lead":"Skrypty shell, wywołania HTTP, komendy Dockera, serwery MCP, agenci i API urządzeń — każde mówi innym językiem. Kod-klej gnije, nic nie jest reużywalne ani audytowalne. Nie możesz zaadresować zdolności — możesz ją tylko ponownie zaimplementować.",
+    "idea.eyebrow":"Idea","idea.h2":"Nazwij raz. Uruchom wszędzie.",
+    "idea.lead":"Zadeklaruj akcję raz jako stały adres — <code>schemat://cel/zasób/operacja</code> — i wywołaj ją z shella, backendu, frontendu, flow albo agenta. <strong>urirun</strong> waliduje payload względem schematu, bramkuje go policy i dispatchuje.",
+    "runtime.eyebrow":"Jeden runtime","runtime.h2":"Flow, MCP, A2A, LLM i LAN — jeden kontrakt.",
+    "runtime.c1.h3":"Runtime URI","runtime.c1.p":"Skanuj artefakty, kompiluj przeglądalny rejestr, uruchamiaj trasy z policy i audytem.",
+    "runtime.c2.h3":"MCP i A2A","runtime.c2.p":"Ten sam rejestr rzutuje się na narzędzia MCP i karty agenta A2A — za darmo.",
+    "runtime.c3.h3":"Mesh LAN","runtime.c3.p":"Wykrywaj węzły, rozgłaszaj usługi, kieruj krok flow do peera.",
+    "runtime.c4.h3":"Adresowalne błędy","runtime.c4.p":"Błędy dostają stały kod, kategorię i link do docs — przeszukiwalne, naprawialne, z ticketem.",
+    "connectors.eyebrow":"Konektory","connectors.h2":"Zdolności jako instalowalne pakiety — w dowolnym języku.",
+    "connectors.lead":"Konektor deklaruje trasy URI raz i eksportuje rejestr. Runtime to kontrakt, nie język: plik wykonywalny konektora może być w czymkolwiek, a <strong>SDK urirun</strong> jest dla wielu języków, więc może być biblioteką w twoim projekcie.",
+    "connectors.note":"Generuj konektory z <strong>komendy</strong>, <strong>usługi</strong> albo artefaktu jak <strong>obraz Dockera</strong> — za każdym razem ten sam kontrakt <code>urirun.bindings.v2</code>. Przeglądaj publiczny hub na <a href=\"https://connect.ifuri.com\">connect.ifuri.com</a>.",
+    "languages.eyebrow":"Jeden kontrakt, dowolny język","languages.h2":"Ten sam konektor — Python, JS, Go, PHP.",
+    "languages.lead":"Konektor po prostu emituje dokument <code>urirun.bindings.v2</code>. SDK jest dla każdego języka, więc urirun jest biblioteką w twoim projekcie. Każdy snippet poniżej produkuje identyczny kontrakt — <code>urirun validate</code> przyjmuje wszystkie.",
+    "proof.eyebrow":"Lokalnie i audytowalnie","proof.h2":"Działa na twoim laptopie, jedną komendą.",
+    "proof.lead":"Każde wywołanie niesie kopertę: URI, payload, decyzję, status, czas i źródło. Nic nie uruchamia się przypadkiem — wykonanie jest domyślnie blokowane za jawną bramką policy.",
+    "ecosystem.eyebrow":"Ekosystem","ecosystem.h2":"Strony, runtime, konektory, dema.",
+    "ecosystem.ifuri":"Aplikacja + runtime, pobieranie.","ecosystem.docs":"Runtime, konektory, referencja błędów.","ecosystem.connect":"Hub konektorów + katalog.","ecosystem.get":"Instalatory węzła / hosta.","ecosystem.roadmap":"Plan + status ticketów na żywo.","ecosystem.examples":"Od bindingu JSON do flow noVNC na 4 komputerach.",
+    "foot.tag":"if URI, then flow.","foot.sub":"Lokalny runtime URI dla flow, agentów, MCP, LLM i aplikacji LAN."
+  },
+  de: {
+    "top.h1b":"dann Flow.",
+    "top.lead":"Eine lokale Laufzeitumgebung, die jeden Befehl, Dienst, Container und jede App in eine <strong>adressierbare URI</strong> verwandelt — und sie dann zu Flows über MCP-Tools, A2A-Agenten, lokale LLMs und LAN-Geräte komponiert.",
+    "cta.install":"Knoten installieren","cta.docs":"Doku","cta.start":"Loslegen",
+    "whatis.eyebrow":"ifURI vs. urirun","whatis.h2":"Zwei Namen, eine Idee.",
+    "whatis.urirun.h3":"urirun — die Engine","whatis.urirun.p":"Die offene Laufzeit + SDK. Eine URI deklarieren, ein Registry kompilieren, eine Route hinter einem Policy-Gate ausführen. Eine Bibliothek für jede Sprache, ganz ohne eigene UI.",
+    "whatis.ifuri.h3":"ifURI — das Produkt","whatis.ifuri.p":"Die lokale App und das Ökosystem auf Basis von urirun: Desktop-App, LAN-Mesh, Connector-Hub, Sprache und Chat — das „Batterien inklusive“-Erlebnis.",
+    "whatis.note":"Kurz gesagt: <strong>urirun</strong> ist die Laufzeit, die du einbettest; <strong>ifURI</strong> ist das, was du startest, installierst und benutzt.",
+    "problem.eyebrow":"Das Problem","problem.h2":"Jede Integration ist ein Einzelfall.",
+    "problem.lead":"Shell-Skripte, HTTP-Aufrufe, Docker-Befehle, MCP-Server, Agenten und Geräte-APIs sprechen jeweils eine andere Sprache. Klebecode verrottet, nichts ist wiederverwendbar und nichts ist prüfbar. Man kann eine Fähigkeit nicht adressieren — nur ihren Aufruf neu implementieren.",
+    "idea.eyebrow":"Die Idee","idea.h2":"Einmal benennen. Überall ausführen.",
+    "idea.lead":"Deklariere eine Aktion einmal als stabile Adresse — <code>schema://ziel/ressource/operation</code> — und rufe sie aus Shell, Backend, Frontend, Flow oder Agent auf. <strong>urirun</strong> validiert die Payload gegen ein Schema, sichert sie per Policy und führt sie aus.",
+    "runtime.eyebrow":"Eine Laufzeit","runtime.h2":"Flows, MCP, A2A, LLM und LAN — ein Vertrag.",
+    "runtime.c1.h3":"URI-Laufzeit","runtime.c1.p":"Artefakte scannen, ein prüfbares Registry kompilieren, Routen mit Policy + Audit ausführen.",
+    "runtime.c2.h3":"MCP & A2A","runtime.c2.p":"Dasselbe Registry projiziert kostenlos auf MCP-Tools und A2A-Agent-Cards.",
+    "runtime.c3.h3":"LAN-Mesh","runtime.c3.p":"Knoten entdecken, Dienste bewerben, einen Flow-Schritt an einen Peer routen.",
+    "runtime.c4.h3":"Adressierbare Fehler","runtime.c4.p":"Fehler erhalten einen stabilen Code, eine Kategorie und einen Doku-Link — durchsuchbar, behebbar, ticketfähig.",
+    "connectors.eyebrow":"Connectoren","connectors.h2":"Fähigkeiten als installierbare Pakete — in jeder Sprache.",
+    "connectors.lead":"Ein Connector deklariert URI-Routen einmal und exportiert ein Registry. Die Laufzeit ist ein Vertrag, keine Sprache: die ausführbare Datei eines Connectors kann in allem geschrieben sein, und das <strong>urirun-SDK</strong> gibt es für mehrere Sprachen, sodass es eine Bibliothek in deinem Projekt sein kann.",
+    "connectors.note":"Erzeuge Connectoren aus einem <strong>Befehl</strong>, einem <strong>Dienst</strong> oder einem Artefakt wie einem <strong>Docker-Image</strong> — jedes Mal derselbe <code>urirun.bindings.v2</code>-Vertrag. Durchstöbere den öffentlichen Hub auf <a href=\"https://connect.ifuri.com\">connect.ifuri.com</a>.",
+    "languages.eyebrow":"Ein Vertrag, jede Sprache","languages.h2":"Derselbe Connector — Python, JS, Go, PHP.",
+    "languages.lead":"Ein Connector gibt einfach ein <code>urirun.bindings.v2</code>-Dokument aus. Das SDK gibt es pro Sprache, sodass urirun eine Bibliothek in deinem Projekt ist. Jeder Ausschnitt unten erzeugt denselben Vertrag — <code>urirun validate</code> akzeptiert sie alle.",
+    "proof.eyebrow":"Lokal & prüfbar","proof.h2":"Es läuft auf deinem Laptop, mit einem Befehl.",
+    "proof.lead":"Jeder Aufruf trägt einen Umschlag: URI, Payload, Entscheidung, Status, Zeit und Quelle. Nichts läuft zufällig — die Ausführung ist standardmäßig verweigert, hinter einem expliziten Policy-Gate.",
+    "ecosystem.eyebrow":"Das Ökosystem","ecosystem.h2":"Seiten, Laufzeit, Connectoren, Demos.",
+    "ecosystem.ifuri":"App + Laufzeit, Downloads.","ecosystem.docs":"Laufzeit, Connectoren, Fehlerreferenz.","ecosystem.connect":"Connector-Hub + Katalog.","ecosystem.get":"Knoten-/Host-Installer.","ecosystem.roadmap":"Plan + Live-Ticket-Status.","ecosystem.examples":"Vom JSON-Binding bis zum 4-Computer-noVNC-Flow.",
+    "foot.tag":"if URI, then flow.","foot.sub":"Lokale URI-Laufzeit für Flows, Agenten, MCP, LLM und LAN-Apps."
+  }
+};
+
+(function(){
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const params = new URLSearchParams(location.search);
+  let lang = params.get('lang') || localStorage.getItem('ifuri-lang') || (navigator.language||'en').slice(0,2);
+  if(!I18N[lang]) lang = 'en';
+  let idx = 0;
+
+  function applyLang(l){
+    lang = I18N[l] ? l : 'en';
+    document.documentElement.lang = lang;
+    localStorage.setItem('ifuri-lang', lang);
+    document.querySelectorAll('[data-i18n]').forEach(el=>{
+      const v = I18N[lang][el.getAttribute('data-i18n')];
+      if(v!=null) el.innerHTML = v;
+    });
+    document.querySelectorAll('.deckbar .lang').forEach(b=>b.classList.toggle('active', b.dataset.lang===lang));
+  }
+
+  function show(n){
+    idx = Math.max(0, Math.min(slides.length-1, n));
+    slides.forEach((s,i)=>s.classList.toggle('active', i===idx));
+    document.getElementById('count').textContent = (idx+1)+' / '+slides.length;
+    document.getElementById('prev').disabled = idx===0;
+    document.getElementById('next').disabled = idx===slides.length-1;
+    document.getElementById('progress').style.width = ((idx+1)/slides.length*100)+'%';
+    if(history.replaceState) history.replaceState(null,'','#'+(slides[idx].id||idx));
+  }
+
+  document.querySelectorAll('.deckbar .lang').forEach(b=>b.addEventListener('click',()=>applyLang(b.dataset.lang)));
+  document.getElementById('prev').addEventListener('click',()=>show(idx-1));
+  document.getElementById('next').addEventListener('click',()=>show(idx+1));
+  document.getElementById('pdfBtn').addEventListener('click',()=>window.print());
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){show(idx+1);e.preventDefault();}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){show(idx-1);e.preventDefault();}
+    else if(e.key==='Home'){show(0);} else if(e.key==='End'){show(slides.length-1);}
+  });
+  // swipe on touch
+  let x0=null;
+  document.addEventListener('touchstart',e=>x0=e.touches[0].clientX,{passive:true});
+  document.addEventListener('touchend',e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>60)show(idx+(dx<0?1:-1));x0=null;},{passive:true});
+
+  // start at hash slide if present
+  const h = location.hash.slice(1);
+  const start = slides.findIndex(s=>s.id===h);
+  applyLang(lang);
+  show(start>=0?start:0);
+})();
+</script>
 <script src="https://ifuri.com/assets/ifuri-ecobar.js" defer></script>
 </body>
 </html>
