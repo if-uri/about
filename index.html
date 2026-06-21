@@ -194,7 +194,7 @@ body.measuring .slide{display:flex !important;position:static}
 
   <section class="slide" id="languages">
     <p class="eyebrow" data-i18n="languages.eyebrow">One contract, any language</p>
-    <h2 data-i18n="languages.h2">The same connector — Python, JS, Go, PHP.</h2>
+    <h2 data-i18n="languages.h2">The same connector — Python, JS, PHP.</h2>
     <p class="lead" data-i18n="languages.lead">A connector just emits a <code>urirun.bindings.v2</code> document. The SDK ships per language, so urirun is a library inside your project. Each snippet below produces the identical contract — <code>urirun validate</code> accepts all of them.</p>
     <div class="langgrid">
       <div class="l"><h4>python</h4><pre>c = urirun.connector(
@@ -208,11 +208,6 @@ def f(path: str):
     input:{required:["path"]},
     argv:["sha256sum","{path}"],
   })</pre></div>
-      <div class="l"><h4>go</h4><pre>urirun.NewConnector("hash","hash").
-  Command("sha256/command/file",
-    urirun.Schema{Required:
-      []string{"path"}},
-    []string{"sha256sum","{path}"})</pre></div>
       <div class="l"><h4>php</h4><pre>(new Urirun\Connector("hash","hash"))
   ->command("sha256/command/file",
     ["required"=>["path"]],
@@ -281,7 +276,7 @@ const I18N = {
     "connectors.eyebrow":"Connectors","connectors.h2":"Capabilities as installable packages — in any language.",
     "connectors.lead":"A connector declares URI routes once and exports a registry. The runtime is a contract, not a language: a connector's executable can be written in anything, and the <strong>urirun SDK</strong> ships for multiple languages so it can be a library inside your project.",
     "connectors.note":"Generate connectors from a <strong>command</strong>, a <strong>service</strong>, or an artifact like a <strong>Docker image</strong> — the same <code>urirun.bindings.v2</code> contract every time. Browse the public hub at <a href=\"https://connect.ifuri.com\">connect.ifuri.com</a>.",
-    "languages.eyebrow":"One contract, any language","languages.h2":"The same connector — Python, JS, Go, PHP.",
+    "languages.eyebrow":"One contract, any language","languages.h2":"The same connector — Python, JS, PHP.",
     "languages.lead":"A connector just emits a <code>urirun.bindings.v2</code> document. The SDK ships per language, so urirun is a library inside your project. Each snippet below produces the identical contract — <code>urirun validate</code> accepts all of them.",
     "proof.eyebrow":"Local-first & auditable","proof.h2":"It runs on your laptop, one command.",
     "proof.lead":"Every call carries an envelope: URI, payload, decision, status, time and source. Nothing runs by accident — execution is default-deny behind an explicit policy gate.",
@@ -309,7 +304,7 @@ const I18N = {
     "connectors.eyebrow":"Konektory","connectors.h2":"Zdolności jako instalowalne pakiety — w dowolnym języku.",
     "connectors.lead":"Konektor deklaruje trasy URI raz i eksportuje rejestr. Runtime to kontrakt, nie język: plik wykonywalny konektora może być w czymkolwiek, a <strong>SDK urirun</strong> jest dla wielu języków, więc może być biblioteką w twoim projekcie.",
     "connectors.note":"Generuj konektory z <strong>komendy</strong>, <strong>usługi</strong> albo artefaktu jak <strong>obraz Dockera</strong> — za każdym razem ten sam kontrakt <code>urirun.bindings.v2</code>. Przeglądaj publiczny hub na <a href=\"https://connect.ifuri.com\">connect.ifuri.com</a>.",
-    "languages.eyebrow":"Jeden kontrakt, dowolny język","languages.h2":"Ten sam konektor — Python, JS, Go, PHP.",
+    "languages.eyebrow":"Jeden kontrakt, dowolny język","languages.h2":"Ten sam konektor — Python, JS, PHP.",
     "languages.lead":"Konektor po prostu emituje dokument <code>urirun.bindings.v2</code>. SDK jest dla każdego języka, więc urirun jest biblioteką w twoim projekcie. Każdy snippet poniżej produkuje identyczny kontrakt — <code>urirun validate</code> przyjmuje wszystkie.",
     "proof.eyebrow":"Lokalnie i audytowalnie","proof.h2":"Działa na twoim laptopie, jedną komendą.",
     "proof.lead":"Każde wywołanie niesie kopertę: URI, payload, decyzję, status, czas i źródło. Nic nie uruchamia się przypadkiem — wykonanie jest domyślnie blokowane za jawną bramką policy.",
@@ -337,7 +332,7 @@ const I18N = {
     "connectors.eyebrow":"Connectoren","connectors.h2":"Fähigkeiten als installierbare Pakete — in jeder Sprache.",
     "connectors.lead":"Ein Connector deklariert URI-Routen einmal und exportiert ein Registry. Die Laufzeit ist ein Vertrag, keine Sprache: die ausführbare Datei eines Connectors kann in allem geschrieben sein, und das <strong>urirun-SDK</strong> gibt es für mehrere Sprachen, sodass es eine Bibliothek in deinem Projekt sein kann.",
     "connectors.note":"Erzeuge Connectoren aus einem <strong>Befehl</strong>, einem <strong>Dienst</strong> oder einem Artefakt wie einem <strong>Docker-Image</strong> — jedes Mal derselbe <code>urirun.bindings.v2</code>-Vertrag. Durchstöbere den öffentlichen Hub auf <a href=\"https://connect.ifuri.com\">connect.ifuri.com</a>.",
-    "languages.eyebrow":"Ein Vertrag, jede Sprache","languages.h2":"Derselbe Connector — Python, JS, Go, PHP.",
+    "languages.eyebrow":"Ein Vertrag, jede Sprache","languages.h2":"Derselbe Connector — Python, JS, PHP.",
     "languages.lead":"Ein Connector gibt einfach ein <code>urirun.bindings.v2</code>-Dokument aus. Das SDK gibt es pro Sprache, sodass urirun eine Bibliothek in deinem Projekt ist. Jeder Ausschnitt unten erzeugt denselben Vertrag — <code>urirun validate</code> akzeptiert sie alle.",
     "proof.eyebrow":"Lokal & prüfbar","proof.h2":"Es läuft auf deinem Laptop, mit einem Befehl.",
     "proof.lead":"Jeder Aufruf trägt einen Umschlag: URI, Payload, Entscheidung, Status, Zeit und Quelle. Nichts läuft zufällig — die Ausführung ist standardmäßig verweigert, hinter einem expliziten Policy-Gate.",
