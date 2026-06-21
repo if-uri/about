@@ -14,7 +14,7 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 INDEX = ROOT / "index.html"
 REQUIRED = [
-    "ifuri-ecobar.js",
+    'class="topbar"',
     'rel="canonical"',
     "og:image",
     "https://get.ifuri.com",

@@ -61,13 +61,19 @@ body.deck .slide{display:none}
 body.deck .slide.active{display:flex;align-items:center;justify-content:center;height:100dvh;min-height:100dvh;max-width:none;margin:0;padding:60px 32px 64px;overflow:hidden;animation:fade .35s ease}
 body.deck .slide .fit{display:flex;flex-direction:column;justify-content:center;width:1000px;max-width:1000px;transform-origin:center center;will-change:transform}
 @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-/* toolbar */
-.deckbar{position:fixed;top:14px;right:16px;z-index:50;display:flex;gap:8px;align-items:center;background:rgba(15,23,42,.78);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:999px;padding:6px 8px}
-.deckbar button{font:inherit;font-size:13px;font-weight:700;color:var(--muted);background:transparent;border:1px solid transparent;border-radius:999px;padding:6px 11px;cursor:pointer}
-.deckbar button:hover{color:var(--text)}
-.deckbar button.lang.active{color:#0F172A;background:var(--green);border-color:var(--green)}
-.deckbar .sep{width:1px;height:20px;background:var(--line)}
-.deckbar .pdf{color:var(--text);border-color:var(--line)}
+/* top header bar */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:50;height:48px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 18px;background:rgba(15,23,42,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topbar .brand-link{font-weight:800;font-size:15px;color:var(--text);white-space:nowrap}
+.topbar nav{display:flex;gap:16px;align-items:center;overflow:hidden}
+.topbar nav a{color:var(--muted);font-weight:650;font-size:13px;white-space:nowrap}
+.topbar nav a:hover{color:var(--text)}
+.topbar .ctrls{display:flex;gap:6px;align-items:center}
+.topbar .ctrls button{font:inherit;font-size:13px;font-weight:700;color:var(--muted);background:transparent;border:1px solid transparent;border-radius:8px;padding:5px 10px;cursor:pointer}
+.topbar .ctrls button:hover{color:var(--text)}
+.topbar .ctrls button.lang.active{color:#0F172A;background:var(--green);border-color:var(--green)}
+.topbar .ctrls .pdf{color:var(--text);border-color:var(--line)}
+.topbar .sep{width:1px;height:18px;background:var(--line)}
+@media(max-width:680px){.topbar nav{display:none}}
 /* nav controls */
 .deckctl{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:50;display:flex;gap:10px;align-items:center;background:rgba(15,23,42,.78);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:999px;padding:6px 10px}
 .deckctl button{font:inherit;color:var(--text);background:transparent;border:1px solid var(--line);border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:16px;line-height:1}
@@ -75,16 +81,18 @@ body.deck .slide .fit{display:flex;flex-direction:column;justify-content:center;
 .deckctl .count{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;min-width:46px;text-align:center}
 .progress{position:fixed;top:0;left:0;height:3px;background:var(--green);width:0;z-index:60;transition:width .3s ease}
 body:not(.deck) .deckctl,body:not(.deck) .progress{display:none}
-@media(max-width:640px){.slide{padding:72px 18px;min-height:100vh}.deckbar{top:8px;right:8px}}
+@media(max-width:640px){.slide{padding:72px 18px;min-height:100vh}}
+/* measuring: temporarily reveal every slide so PDF prep can size each one */
+body.measuring .slide{display:flex !important;position:static}
 
-/* ---- print / PDF: one slide per page, all visible ---- */
+/* ---- print / PDF: one slide per A4 page, scaled to fit (set inline by JS) ---- */
 @media print{
-  @page{size:A4 landscape;margin:14mm}
-  body{background:#0F172A !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .deckbar,.deckctl,.progress,.term .cur{display:none !important}
-  body.deck .slide,body.deck .slide.active{display:flex !important;min-height:auto;height:auto;page-break-after:always;break-after:page;padding:24px 8px;max-width:100%;overflow:visible}
-  body.deck .slide .fit{transform:none !important;width:auto !important;max-width:100% !important}
-  .slide:last-of-type{page-break-after:auto}
+  @page{size:A4 landscape;margin:8mm}
+  html,body{background:#0F172A !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .topbar,.deckctl,.progress,.term .cur{display:none !important}
+  body.deck .slide,body.deck .slide.active{display:flex !important;align-items:center;justify-content:center;width:100%;min-height:188mm;height:188mm;max-width:none;margin:0;padding:0;overflow:hidden;page-break-after:always;break-after:page}
+  body.deck .slide .fit{width:1000px;max-width:1000px}
+  .slide:last-of-type{page-break-after:auto;break-after:auto}
   pre,.card,.langgrid .l,.term{box-shadow:none}
 }
 </style>
@@ -95,13 +103,23 @@ body:not(.deck) .deckctl,body:not(.deck) .progress{display:none}
 <body class="deck">
 
 <div class="progress" id="progress"></div>
-<nav class="deckbar" aria-label="presentation controls">
-  <button class="lang" data-lang="pl">PL</button>
-  <button class="lang" data-lang="en">EN</button>
-  <button class="lang" data-lang="de">DE</button>
-  <span class="sep"></span>
-  <button class="pdf" id="pdfBtn" title="Download as PDF">PDF</button>
-</nav>
+<header class="topbar">
+  <a class="brand-link" href="https://ifuri.com"><b class="brand">if<i>URI</i></b></a>
+  <nav aria-label="ecosystem">
+    <a href="https://ifuri.com">ifuri.com</a>
+    <a href="https://docs.ifuri.com">Docs</a>
+    <a href="https://connect.ifuri.com">Connectors</a>
+    <a href="https://about.urirun.com">urirun</a>
+    <a href="https://github.com/if-uri">GitHub</a>
+  </nav>
+  <div class="ctrls" aria-label="presentation controls">
+    <button class="lang" data-lang="pl">PL</button>
+    <button class="lang" data-lang="en">EN</button>
+    <button class="lang" data-lang="de">DE</button>
+    <span class="sep"></span>
+    <button class="pdf" id="pdfBtn" title="Download / print as PDF">⤓ PDF</button>
+  </div>
+</header>
 
 <main>
 
@@ -356,7 +374,7 @@ const I18N = {
       const v = I18N[lang][el.getAttribute('data-i18n')];
       if(v!=null) el.innerHTML = v;
     });
-    document.querySelectorAll('.deckbar .lang').forEach(b=>b.classList.toggle('active', b.dataset.lang===lang));
+    document.querySelectorAll('.topbar .lang').forEach(b=>b.classList.toggle('active', b.dataset.lang===lang));
     fitSlide();
   }
 
@@ -374,10 +392,27 @@ const I18N = {
   window.addEventListener('load', fitSlide);
   window.addEventListener('hashchange', ()=>{const i=slides.findIndex(s=>s.id===location.hash.slice(1));if(i>=0&&i!==idx)show(i);});
 
-  document.querySelectorAll('.deckbar .lang').forEach(b=>b.addEventListener('click',()=>applyLang(b.dataset.lang)));
+  // ---- PDF export: scale every slide to fit one A4-landscape page, then print ----
+  function prepPrint(){
+    document.body.classList.add('measuring');
+    slides.forEach(s=>{const f=s.querySelector('.fit'); if(f) f.style.transform='none';});
+    // A4 landscape printable area at 96dpi with 8mm margins ≈ 1085 × 740 px
+    slides.forEach(s=>{const f=s.querySelector('.fit'); if(!f) return;
+      const sc=Math.min(1060/f.offsetWidth, 700/f.offsetHeight, 1.6);
+      f.dataset.psc = (sc>0?sc:1);});
+    slides.forEach(s=>{const f=s.querySelector('.fit'); if(f) f.style.transform='scale('+f.dataset.psc+')';});
+    document.body.classList.remove('measuring');
+  }
+  function clearPrint(){
+    slides.forEach(s=>{const f=s.querySelector('.fit'); if(f){f.style.transform='none'; delete f.dataset.psc;}});
+    fitSlide();
+  }
+  document.querySelectorAll('.topbar .lang').forEach(b=>b.addEventListener('click',()=>applyLang(b.dataset.lang)));
   document.getElementById('prev').addEventListener('click',()=>show(idx-1));
   document.getElementById('next').addEventListener('click',()=>show(idx+1));
-  document.getElementById('pdfBtn').addEventListener('click',()=>window.print());
+  document.getElementById('pdfBtn').addEventListener('click',()=>{prepPrint();window.print();});
+  window.addEventListener('beforeprint', prepPrint);
+  window.addEventListener('afterprint', clearPrint);
   document.addEventListener('keydown',e=>{
     if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){show(idx+1);e.preventDefault();}
     else if(e.key==='ArrowLeft'||e.key==='PageUp'){show(idx-1);e.preventDefault();}
@@ -395,6 +430,5 @@ const I18N = {
   show(start>=0?start:0);
 })();
 </script>
-<script src="https://ifuri.com/assets/ifuri-ecobar.js" defer></script>
 </body>
 </html>
