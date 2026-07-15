@@ -1,0 +1,18 @@
+# about | 16 func | 2f | 367L | shell | 2026-07-14
+# generated in 0.00s
+
+HEALTH:
+  CC̄=3.0  critical=0 (limit:10)  dup=0  cycles=0
+
+MODULES[7] (top by size):
+  M[assets/ifuri-ecobar.js] 105L C:0 F:12 CC↑8 D:0 (javascript)
+  M[prefact.yaml] 94L C:0 F:0 CC↑0 D:0 (yaml)
+  M[scripts/check.py] 70L C:1 F:4 CC↑8 D:0 (python)
+  M[project.sh] 66L C:0 F:0 CC↑0 D:0 (shell)
+  M[Makefile] 14L C:0 F:0 CC↑0 D:0 ()
+  M[scripts/deploy-plesk.sh] 14L C:0 F:0 CC↑0 D:0 (shell)
+  M[tree.sh] 4L C:0 F:0 CC↑0 D:0 (shell)
+  LANGS: shell:3/javascript:1/python:1/other:1/yaml:1
+
+EVOLUTION:
+  2026-07-14 CC̄=3.0 crit=0 367L // Automated analysis

@@ -1,0 +1,110 @@
+name: Code Quality Improvement
+project_name: ''
+project_type: prefactoring
+domain: dev-tools
+goal: Improve code quality using prefact
+goals:
+- Fix all prefact-detected issues
+- Improve code maintainability
+- Ensure consistent code style
+quality_gates:
+- metric: Prefact Issues
+  threshold: '0'
+sprints:
+- id: sprint-1
+  name: Code Quality Improvements
+  duration: 2 weeks
+  objectives:
+  - Fix code quality issues
+  task_patterns:
+  - id: ticket-9a0828f4
+    name: Fix ast-print-statements issues
+    description: Resolve 5 ast-print-statements issues in scripts/check.py
+    task_type: prefactor
+    priority: medium
+    estimate: 2d
+    files:
+    - scripts/check.py
+    rule_id: ast-print-statements
+    count: 5
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-9a7f2783
+    name: Fix ast-missing-return-type issues
+    description: Resolve 2 ast-missing-return-type issues in scripts/check.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - scripts/check.py
+    rule_id: ast-missing-return-type
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-1935697d
+    name: Fix ruff-print-statements issues
+    description: Resolve 5 ruff-print-statements issues in scripts/check.py
+    task_type: prefactor
+    priority: medium
+    estimate: 2d
+    files:
+    - scripts/check.py
+    rule_id: ruff-print-statements
+    count: 5
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-f8662d12
+    name: Fix smart-return-type issues
+    description: Resolve 2 smart-return-type issues in scripts/check.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - scripts/check.py
+    rule_id: smart-return-type
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-0e9c3434
+    name: Fix string-concat-fstring issues
+    description: Resolve 2 string-concat-fstring issues in scripts/check.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - scripts/check.py
+    rule_id: string-concat-fstring
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-047d57d0
+    name: Fix ai-boilerplate issues
+    description: Resolve 1 ai-boilerplate issues in scripts/check.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - scripts/check.py
+    rule_id: ai-boilerplate
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-b933cc71
+    name: Fix import-optimization issues
+    description: Resolve 1 import-optimization issues in scripts/check.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - scripts/check.py
+    rule_id: import-optimization
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced

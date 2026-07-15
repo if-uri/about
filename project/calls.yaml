@@ -1,0 +1,55 @@
+project: /home/tom/github/if-uri/about
+generated_from: code2llm call graph analysis
+stats:
+  total_nodes: 3
+  total_edges: 2
+  modules_count: 1
+nodes:
+  assets.ifuri-ecobar.esc:
+    name: esc
+    module: assets.ifuri-ecobar
+    line: 58
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 1
+  assets.ifuri-ecobar.isActive:
+    name: isActive
+    module: assets.ifuri-ecobar
+    line: 45
+    cyclomatic_complexity: 8
+    calls_out: 1
+    calls_in: 1
+  assets.ifuri-ecobar.navHTML:
+    name: navHTML
+    module: assets.ifuri-ecobar
+    line: 60
+    cyclomatic_complexity: 3
+    calls_out: 4
+    calls_in: 0
+edges:
+- caller: assets.ifuri-ecobar.navHTML
+  callee: assets.ifuri-ecobar.esc
+  call_type: resolved
+- caller: assets.ifuri-ecobar.navHTML
+  callee: assets.ifuri-ecobar.isActive
+  call_type: resolved
+modules:
+  assets.ifuri-ecobar:
+  - assets.ifuri-ecobar.esc
+  - assets.ifuri-ecobar.isActive
+  - assets.ifuri-ecobar.navHTML
+entry_points:
+- assets.ifuri-ecobar.curView
+- assets.ifuri-ecobar.host
+- assets.ifuri-ecobar.hostEl
+- assets.ifuri-ecobar.label
+- assets.ifuri-ecobar.lang
+- assets.ifuri-ecobar.navHTML
+- assets.ifuri-ecobar.p
+- assets.ifuri-ecobar.params
+- assets.ifuri-ecobar.sr
+- assets.ifuri-ecobar.view
+- scripts.check.Counter.__init__
+- scripts.check.Counter.handle_endtag
+- scripts.check.Counter.handle_starttag
+- scripts.check.main

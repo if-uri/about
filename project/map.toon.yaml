@@ -1,0 +1,39 @@
+# about | 7f 367L | shell:3,python:1,javascript:1,yaml:1 | 2026-07-14
+# generated in 0.00s
+# stats: 16 func | 0 cls | 7 mod | CC̄=3.0 | critical:0 | cycles:0
+# alerts[0]: none
+# hotspots[1]: main fan=7
+# evolution: CC̄ 2.9→3.0 (regressed +0.1)
+# Keys: M=modules, D=details, i=imports, e=exports, c=classes, f=functions, m=methods
+M[7]:
+  Makefile,14
+  assets/ifuri-ecobar.js,105
+  prefact.yaml,94
+  project.sh,66
+  scripts/check.py,70
+  scripts/deploy-plesk.sh,14
+  tree.sh,4
+D:
+  scripts/check.py:
+    e: Counter,main
+    Counter(html.parser.HTMLParser): __init__(0),handle_starttag(2),handle_endtag(1)
+    main()
+  assets/ifuri-ecobar.js:
+    e: params,lang,view,host,curView,isActive,esc,navHTML,label,hostEl,sr,p
+    params()
+    lang()
+    view()
+    host()
+    curView()
+    isActive()
+    esc()
+    navHTML()
+    label()
+    hostEl()
+    sr()
+    p()
+  Makefile:
+  tree.sh:
+  project.sh:
+  scripts/deploy-plesk.sh:
+  prefact.yaml:

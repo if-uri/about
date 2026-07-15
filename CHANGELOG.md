@@ -1,5 +1,16 @@
 # Changelog
 
+## [Unreleased] - 2026-07-14
+
+### Fixed
+- Fix ast-print-statements issues (ticket-9a0828f4)
+- Fix ast-missing-return-type issues (ticket-9a7f2783)
+- Fix ruff-print-statements issues (ticket-1935697d)
+- Fix smart-return-type issues (ticket-f8662d12)
+- Fix string-concat-fstring issues (ticket-0e9c3434)
+- Fix ai-boilerplate issues (ticket-047d57d0)
+- Fix import-optimization issues (ticket-b933cc71)
+
 ## [0.2.0]
 
 ### Added

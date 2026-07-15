@@ -1,0 +1,22 @@
+# code2llm call graph | /home/tom/github/if-uri/about
+# generated in 0.00s
+# nodes: 3 | edges: 2 | modules: 1
+# CC̄=3.0
+
+HUBS[20]:
+  assets.ifuri-ecobar.navHTML
+    CC=3  in:0  out:4  total:4
+  assets.ifuri-ecobar.esc
+    CC=1  in:1  out:2  total:3
+  assets.ifuri-ecobar.isActive
+    CC=8  in:1  out:1  total:2
+
+MODULES:
+  assets.ifuri-ecobar  [3 funcs]
+    esc  CC=1  out:2
+    isActive  CC=8  out:1
+    navHTML  CC=3  out:4
+
+EDGES:
+  assets.ifuri-ecobar.navHTML → assets.ifuri-ecobar.esc
+  assets.ifuri-ecobar.navHTML → assets.ifuri-ecobar.isActive

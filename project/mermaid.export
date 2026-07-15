@@ -1,0 +1,28 @@
+flowchart TD
+%% generated in 0.00s
+    subgraph assets__ifuri_ecobar
+        assets__ifuri_ecobar__params["params"]
+        assets__ifuri_ecobar__lang["lang"]
+        assets__ifuri_ecobar__view["view"]
+        assets__ifuri_ecobar__host("host CC=8")
+        assets__ifuri_ecobar__curView("curView CC=8")
+        assets__ifuri_ecobar__isActive("isActive CC=8")
+        assets__ifuri_ecobar__esc["esc"]
+        assets__ifuri_ecobar__navHTML["navHTML"]
+        assets__ifuri_ecobar__label["label"]
+        assets__ifuri_ecobar__hostEl["hostEl"]
+        assets__ifuri_ecobar__sr["sr"]
+        assets__ifuri_ecobar__p["p"]
+    end
+    subgraph scripts__check
+        scripts__check__Counter____init__["__init__"]
+        scripts__check__Counter__handle_starttag["handle_starttag"]
+        scripts__check__Counter__handle_endtag["handle_endtag"]
+        scripts__check__main("main CC=8")
+    end
+    assets__ifuri_ecobar__navHTML --> assets__ifuri_ecobar__esc
+    assets__ifuri_ecobar__navHTML --> assets__ifuri_ecobar__isActive
+
+    classDef highCC fill:#ff6b6b,stroke:#c92a2a,color:#fff
+    classDef medCC fill:#ffd43b,stroke:#f08c00,color:#000
+    class scripts__check__main,assets__ifuri_ecobar__host,assets__ifuri_ecobar__curView,assets__ifuri_ecobar__isActive medCC
