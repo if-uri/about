@@ -15,6 +15,7 @@ deploy: ## Publish to about.ifuri.com (Plesk)
 
 doctor-build: ## Build check for diagnostics
 	python3 -m py_compile scripts/check.py
+	@echo "Build check successful"
 
 doctor-setup: ## Bootstrap the environment for diagnostics
 	python3 --version
