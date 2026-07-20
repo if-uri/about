@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.2.2] - 2026-07-20
+
+- Validator accepted repair for Issue #81 (`gh-29757125576-1-0011_organization-repository-audit`).
+
 ## [0.2.1] - 2026-07-20
 
 - Validator accepted repair for Issue #74 (`gh-29732748080-1-0011_organization-repository-audit`).
