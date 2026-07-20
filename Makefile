@@ -1,4 +1,4 @@
-.PHONY: serve test deploy help
+.PHONY: serve test deploy help doctor-setup
 PORT ?= 8123
 
 help:
@@ -12,3 +12,6 @@ test: ## Validate the static presentation
 
 deploy: ## Publish to about.ifuri.com (Plesk)
 	bash scripts/deploy-plesk.sh
+
+doctor-setup: ## Bootstrap the environment for diagnostics
+	python3 --version
